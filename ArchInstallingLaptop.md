@@ -1,5 +1,10 @@
 # Instalar o Arch Linux no meu laptop
 
+## Configurando Layout do teclado
+```
+loadkeys br-abnt2
+```
+
 ## Conexão com a Internet
 ### Primeiro, se você não souber o nome do seu dispositivo sem fio, liste todos os dispositivos Wi-Fi:
 ``` 
@@ -27,6 +32,13 @@ iwctl station wlan0 connect SSID
 timedatectl set-ntp true 
 ``` 
 ## Formatando o disco
+
+### Caso não tenha lidado com suas partições anteriormente, conheça o CFDISK e o FDISK (Confie em mim eles serão seus melhores amigos) seguem alguns comandos que podem te ajudar:
+```
+fdisk /dev/sda
+fdisk -l /dev/sda
+cfdisk /dev/sda
+```
 
 ### Formatar a partição sda1 (/root)
 ``` 
@@ -82,7 +94,7 @@ ln -sf /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
 ``` 
 ## Configurar o repositório
 
-### Com este comando habilitamos o repositório multlib:
+### Com este comando habilitamos o repositório multilib:
 ``` 
 sed -i  '/multilib\]/,+1  s/^#//'  /etc/pacman.conf
 pacman -Sy
@@ -130,12 +142,37 @@ grub-install --target=i386-pc --recheck /dev/sda
 pacman -S intel-ucode ( Se você tiver uma CPU Intel, instale o pacote intel-ucode )
 grub-mkconfig -o /boot/grub/grub.cfg
 ``` 
+
+#### Caso ao executar mkinitcpio -P tenha se deparado com a warn: Possibly missing firmware for module: aic94xx, execute depois de ter instalado o GIT mais a frente
+```
+git clone https://aur.archlinux.org/aic94xx-firmware.git
+cd aic94xx-firmware
+makepkg -sri
+```
+
+#### Caso ao executar mkinitcpio -P tenha se deparado com a warn: Possibly missing firmware for module: wd719x, execute depois de ter instalado o GIT mais a frente
+```
+git clone https://aur.archlinux.org/wd719x-firmware.git
+cd wd719x-firmware
+makepkg -sri
+```
+
+#### Caso ao executar mkinitcpio -P tenha se deparado com a warn: Possibly missing firmware for module: xhci_pci, execute depois de ter instalado o GIT mais a frente
+```
+git clone https://aur.archlinux.org/upd72020x-fw.git
+cd upd72020x-fw
+makepkg -sri
+```
+
 ## Desmontar as partições e reiniciar:
 ``` 
 exit
 umount -R /mnt
 reboot
 ``` 
+
+### Caso tenha tido problemas com algum dos passos anteriores você pode consultar a <a href="https://wiki.archlinux.org/index.php/installation_guide">documentação oficial</a>
+
 
 ## Install Display Server
 ``` 
